@@ -3,22 +3,41 @@ class Matrix():
         self.m = m
     def solve(self):
         self.make_stairs()
-        print(self.calc_x())
-        self.print()
+
+        if self.matrix_rank() < len(self.m):
+            if round(self.m[-1][-1], 6) != 0:
+                return "Uklad sprzeczny"
+            else:
+                return "Uklad nieoznaczony"
+        return self.calc_x()
 
     def calc_x(self):
         x = []
+        for i in reversed(range(len(self.m))):
+            tmpVal = self.m[i][-1]
+            for j in range(len(self.m) - i - 1):
+                tmpVal -= self.m[i][-j-2] * x[j]
 
+            x.append(round(tmpVal/self.m[i][i], 6))
+        return x
+    def matrix_rank(self):
+        val = 0
+        for i in range(len(self.m)):
+            if self.m[i][i] != 0:
+                val+=1
+        return val
     def make_stairs(self):
         for i in range(len(self.m)):
-            if self.m[i][i] == 0: # sprawdza czy jest niezerowa wartosc i jezeli jest to zamienia wiersze
-                self.swap_rows(self.m[i], self.m[self.find(i)])
+            to_swap = self.find(i)
 
-            for j in range(i+1, len(self.m)):
+            if to_swap != i: # wyznaczanie elementu glownego
+                self.swap_rows(self.m[i], self.m[self.find(i)])
+            #self.print()
+
+
+            for j in range(i+1, len(self.m)): # zera w kolejnych wierszach
                 self.sub_row(self.m[j], self.m[i], self.m[j][i]/self.m[i][i])
 
-        for i in range(len(self.m)):
-            self.div_row(self.m[i], self.m[i][i])
     def print(self):
         print("")
         for row in self.m:
@@ -30,10 +49,15 @@ class Matrix():
         for i in range(len(r1)):
             r1[i], r2[i] = r2[i], r1[i]
     def find(self, col):
-        for i in range(len(self.m)):
-            if self.m[i][col] != 0:
-                return i
-        return False
+        max = self.m[col][col]
+        max_index = col
+        for i in range(col+1, len(self.m)):
+
+            if self.m[i][col] > max:
+                max = self.m[i][col]
+                max_index = i
+
+        return max_index
     def div_row(self, r1, div):
         for i in range(len(r1)):
             r1[i] /= div
