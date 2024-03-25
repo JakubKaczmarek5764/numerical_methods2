@@ -3,6 +3,7 @@ class Matrix():
         self.m = m
     def solve(self):
         self.make_stairs()
+        #self.print()
 
         if self.matrix_rank() < len(self.m):
             if round(self.m[-1][-1], 6) != 0:
@@ -20,7 +21,7 @@ class Matrix():
 
             x.append(round(tmpVal/self.m[i][i], 6))
         return x
-    def matrix_rank(self):
+    def matrix_rank(self): # do zmiany
         val = 0
         for i in range(len(self.m)):
             if self.m[i][i] != 0:
@@ -33,8 +34,7 @@ class Matrix():
             if to_swap != i: # wyznaczanie elementu glownego
                 self.swap_rows(self.m[i], self.m[self.find(i)])
             #self.print()
-
-
+            if self.m[i][i] == 0: continue
             for j in range(i+1, len(self.m)): # zera w kolejnych wierszach
                 self.sub_row(self.m[j], self.m[i], self.m[j][i]/self.m[i][i])
 
