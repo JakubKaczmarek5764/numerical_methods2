@@ -9,7 +9,7 @@ class Matrix():
                 return "Uklad sprzeczny"
             else:
                 return "Uklad nieoznaczony"
-        return self.calc_x()
+        return self.calc_x()[::-1]
 
     def calc_x(self):
         x = []
